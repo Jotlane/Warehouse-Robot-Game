@@ -3,9 +3,16 @@
 [ext_resource type="Script" uid="uid://da7fbmhy8deg" path="res://Scripts/game_manager.gd" id="1_oj352"]
 [ext_resource type="PackedScene" uid="uid://dl3duota3eb3u" path="res://Scenes/dummy_node_to_be_spawned.tscn" id="2_e5fcp"]
 [ext_resource type="PackedScene" uid="uid://bunwvncxiw8to" path="res://Scenes/grid.tscn" id="3_sq00h"]
+[ext_resource type="PackedScene" uid="uid://bbdfmetftxp4r" path="res://Scenes/robot.tscn" id="4_mmt5l"]
 
 [node name="GameManager" type="Node2D" unique_id=1908083967]
 script = ExtResource("1_oj352")
 dummy_scene = ExtResource("2_e5fcp")
 grid_scene = ExtResource("3_sq00h")
 grid_position_offset = Vector2(200, 110)
+robot_scene = ExtResource("4_mmt5l")
+
+[node name="SpawnTimer" type="Timer" parent="." unique_id=745342297]
+autostart = true
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

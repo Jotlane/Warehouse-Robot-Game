@@ -6,10 +6,13 @@ var num_columns = 8
 @export var dummy_scene:PackedScene
 @export var grid_scene:PackedScene
 @export var grid_position_offset:Vector2
+@export var robot_scene:PackedScene
+
+var grid_instance
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var grid_instance = grid_scene.instantiate()
+	grid_instance = grid_scene.instantiate()
 	grid_instance.position = grid_position_offset
 	add_child(grid_instance)
 	for i in range(num_rows):
@@ -33,6 +36,13 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+var aa = 0
+func _on_spawn_timer_timeout() -> void:
+	var robot_instance = robot_scene.instantiate()
+	robot_instance.direction = Vector2.DOWN
+	robot_instance.position = grid_index_to_position(array_to_spawner_grid(aa))
+	grid_instance.add_child(robot_instance)
+	aa +=1
 
 func spawner_grid_to_array(pos:Vector2i) -> int:
 	if (pos.y == 0):
@@ -63,6 +73,7 @@ func array_to_spawner_grid(idx:int) -> Vector2i:
 		print("array_to_spawner_grid: Invalid array, returning Vector2i(0,0)")
 		return Vector2i(0,0)
 
+func grid_index_to_position(pos:Vector2i):	return Vector2(pos.x * grid_size,pos.y * grid_size)
 
 #DEBUG FUNCTIONS
 func debug_array_to_spawner_grid() ->void:

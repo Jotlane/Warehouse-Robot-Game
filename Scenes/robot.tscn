@@ -3,9 +3,19 @@
 [ext_resource type="Script" uid="uid://c8ljndky12sim" path="res://Scripts/robot.gd" id="1_2vrla"]
 [ext_resource type="Texture2D" uid="uid://opu0gbd3evfr" path="res://icon.svg" id="1_lp65t"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2vrla"]
+size = Vector2(80, 80)
+
 [node name="Robot" type="Node2D" unique_id=733011404]
 script = ExtResource("1_2vrla")
 
 [node name="RobotSprite" type="Sprite2D" parent="." unique_id=1685826178]
 scale = Vector2(0.645, 0.645)
 texture = ExtResource("1_lp65t")
+
+[node name="RobotClickArea" type="Area2D" parent="." unique_id=1127237371]
+
+[node name="RobotClickShape" type="CollisionShape2D" parent="RobotClickArea" unique_id=99925935]
+shape = SubResource("RectangleShape2D_2vrla")
+
+[connection signal="input_event" from="RobotClickArea" to="." method="_on_robot_click_area_input_event"]
