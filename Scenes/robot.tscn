@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://bbdfmetftxp4r"]
+
+[ext_resource type="Script" uid="uid://c8ljndky12sim" path="res://Scripts/robot.gd" id="1_2vrla"]
+[ext_resource type="Texture2D" uid="uid://opu0gbd3evfr" path="res://icon.svg" id="1_lp65t"]
+
+[node name="Robot" type="Node2D" unique_id=733011404]
+script = ExtResource("1_2vrla")
+
+[node name="RobotSprite" type="Sprite2D" parent="." unique_id=1685826178]
+scale = Vector2(0.645, 0.645)
+texture = ExtResource("1_lp65t")
