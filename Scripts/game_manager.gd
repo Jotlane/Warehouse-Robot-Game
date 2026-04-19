@@ -4,7 +4,7 @@ extends Node2D
 @export var grid_scene:PackedScene
 @export var grid_position_offset:Vector2
 @export var robot_scene:PackedScene
-
+var grid_obstacles:Array[int] = []
 var grid_instance
 
 # Called when the node enters the scene tree for the first time.
@@ -13,6 +13,10 @@ func _ready() -> void:
 	grid_instance.position = grid_position_offset
 	add_child(grid_instance)
 	Singleton.grid_instance = grid_instance
+	
+	grid_obstacles.resize(Singleton.num_columns*Singleton.num_rows)
+	grid_obstacles.fill(0)
+	
 	for i in range(Singleton.num_rows):
 		var instance = dummy_scene.instantiate()
 		instance.position = Vector2(0,i*Singleton.grid_size)
@@ -37,9 +41,17 @@ func _on_spawn_timer_timeout() -> void:
 	robot_instance.direction = Singleton.get_travel_direction(Singleton.array_to_spawner_grid(spawner_selected))
 	grid_instance.add_child(robot_instance)
 
+func crash_occurred(pos:Vector2) -> void:
+	add_obstacle(Singleton.grid_position_to_array(Singleton.grid_position_to_index(pos)))
 
-
-
+func add_obstacle(idx:int) -> void:
+	if (grid_obstacles[idx]):
+		print("Already occupied with obstacle")
+	else:
+		grid_obstacles[idx] = 1
+		var obstacle_instance = Singleton.obstacle_scene.instantiate()
+		obstacle_instance.position = Singleton.grid_index_to_position(Singleton.array_to_grid_position(idx))
+		grid_instance.add_child(obstacle_instance)
 
 
 
