@@ -6,6 +6,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2vrla"]
 size = Vector2(80, 80)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6phhs"]
+size = Vector2(75, 75)
+
 [node name="Robot" type="Node2D" unique_id=733011404]
 script = ExtResource("1_2vrla")
 
@@ -18,4 +21,12 @@ texture = ExtResource("1_lp65t")
 [node name="RobotClickShape" type="CollisionShape2D" parent="RobotClickArea" unique_id=99925935]
 shape = SubResource("RectangleShape2D_2vrla")
 
+[node name="RobotCrashArea" type="Area2D" parent="." unique_id=1533427715]
+collision_layer = 2
+collision_mask = 2
+
+[node name="RobotCrashShape" type="CollisionShape2D" parent="RobotCrashArea" unique_id=650857833]
+shape = SubResource("RectangleShape2D_6phhs")
+
 [connection signal="input_event" from="RobotClickArea" to="." method="_on_robot_click_area_input_event"]
+[connection signal="area_entered" from="RobotCrashArea" to="." method="_on_robot_crash_area_area_entered"]

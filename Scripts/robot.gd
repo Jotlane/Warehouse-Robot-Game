@@ -21,3 +21,7 @@ func _process(delta: float) -> void:
 func _on_robot_click_area_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if (event.is_action_pressed("left_click")):
 		is_stopped = !is_stopped
+
+
+func _on_robot_crash_area_area_entered(area: Area2D) -> void:
+	print("Crash with ", area)
