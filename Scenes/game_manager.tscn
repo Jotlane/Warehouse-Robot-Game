@@ -12,11 +12,9 @@ dummy_scene = ExtResource("2_e5fcp")
 grid_scene = ExtResource("3_sq00h")
 grid_position_offset = Vector2(200, 110)
 robot_scene = ExtResource("4_mmt5l")
+finish_point_scene = ExtResource("5_fgdfb")
 
 [node name="SpawnTimer" type="Timer" parent="." unique_id=745342297]
 autostart = true
-
-[node name="FinishPoint" parent="." unique_id=1582533133 instance=ExtResource("5_fgdfb")]
-position = Vector2(365, 501)
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

@@ -13,7 +13,7 @@ scale = Vector2(0.441, 0.441)
 texture = ExtResource("1_eqp27")
 
 [node name="FinishPointArea" type="Area2D" parent="." unique_id=373074289]
-collision_layer = 12
+collision_layer = 0
 collision_mask = 0
 
 [node name="FinishPointCollisionShape" type="CollisionShape2D" parent="FinishPointArea" unique_id=1449424475]

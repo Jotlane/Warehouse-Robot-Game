@@ -11,6 +11,8 @@ enum LaneStatus {
 @export var grid_scene:PackedScene
 @export var grid_position_offset:Vector2
 @export var robot_scene:PackedScene
+@export var finish_point_scene:PackedScene
+
 var grid_obstacles:Array[int] = []
 var grid_instance
 var lanes:Array[LaneStatus] = []
@@ -33,16 +35,27 @@ func _ready() -> void:
 	
 	Singleton.crash_occurred.connect(_crash_occurred)
 	
-	for i in range(Singleton.num_rows):
-		var instance = dummy_scene.instantiate()
-		instance.position = Vector2(0,i*Singleton.grid_size)
-		grid_instance.add_child(instance)
+	#for i in range(Singleton.num_rows):
+		#var instance = dummy_scene.instantiate()
+		#instance.position = Vector2(0,i*Singleton.grid_size)
+		#grid_instance.add_child(instance)
+		#
+	#for j in range(Singleton.num_columns):
+		#var instance = dummy_scene.instantiate()
+		#instance.position = Vector2(j*Singleton.grid_size,0)
+		#grid_instance.add_child(instance)
 		
-	for j in range(Singleton.num_columns):
-		var instance = dummy_scene.instantiate()
-		instance.position = Vector2(j*Singleton.grid_size,0)
-		grid_instance.add_child(instance)
-
+	for i in range((Singleton.num_columns-1)*2+(Singleton.num_rows-1)*2):
+		if (i != 0 and i != Singleton.num_columns-1 and i != Singleton.num_columns -1 + Singleton.num_rows-1 and i != Singleton.num_columns -1 + Singleton.num_rows-1+Singleton.num_columns -1):
+			var finish_point_instance = finish_point_scene.instantiate()
+			var spawner_grid = Singleton.array_to_spawner_grid(i)
+			if (spawner_grid.x == 0 or spawner_grid.y == 0):
+				finish_point_instance.get_node("FinishPointArea").set_collision_layer_value(3,true)
+			elif(spawner_grid.x == Singleton.num_columns -1 or spawner_grid.y == Singleton.num_rows -1):
+				finish_point_instance.get_node("FinishPointArea").set_collision_layer_value(4,true)
+			else: print("Error: Cannot set finish point collision area")
+			finish_point_instance.position = Singleton.grid_index_to_position(Singleton.array_to_spawner_grid(i))
+			grid_instance.add_child(finish_point_instance)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -82,9 +95,11 @@ func _on_spawn_timer_timeout() -> void:
 		robot_instance.direction = Singleton.get_travel_direction(spawner_selected)
 		if (robot_instance.direction == Vector2.DOWN or robot_instance.direction == Vector2.RIGHT):
 			robot_instance.get_node("RobotCrashArea").set_collision_mask_value(4,true)
+			robot_instance.set_heading_right(true)
 			#If I am heading right, I will reach the one on the right
 		elif (robot_instance.direction == Vector2.UP or robot_instance.direction == Vector2.LEFT):
 			robot_instance.get_node("RobotCrashArea").set_collision_mask_value(3,true)
+			robot_instance.set_heading_right(false)
 			#If I am heading left, I will reach the one on the left
 		grid_instance.add_child(robot_instance)
 
