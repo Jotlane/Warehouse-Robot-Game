@@ -6,6 +6,8 @@ var num_rows = 8
 var num_columns = 8
 var obstacle_scene:PackedScene
 
+signal crash_occurred(pos:Vector2)
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	obstacle_scene = preload("uid://c77ex05y7wk6p")

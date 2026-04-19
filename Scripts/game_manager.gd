@@ -1,11 +1,20 @@
 extends Node2D
 
+enum LaneStatus {
+	LEFT,
+	RIGHT,
+	CLOSED,
+	OPEN
+}
+
 @export var dummy_scene:PackedScene
 @export var grid_scene:PackedScene
 @export var grid_position_offset:Vector2
 @export var robot_scene:PackedScene
 var grid_obstacles:Array[int] = []
 var grid_instance
+var lanes:Array[LaneStatus] = []
+var open_lanes:Array[int] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,6 +25,13 @@ func _ready() -> void:
 	
 	grid_obstacles.resize(Singleton.num_columns*Singleton.num_rows)
 	grid_obstacles.fill(0)
+	
+	lanes.resize(Singleton.num_rows - 2 + Singleton.num_columns - 2)
+	lanes.fill(LaneStatus.OPEN)
+	for i in range(lanes.size()):
+		open_lanes.append(i)
+	
+	Singleton.crash_occurred.connect(_crash_occurred)
 	
 	for i in range(Singleton.num_rows):
 		var instance = dummy_scene.instantiate()
@@ -31,6 +47,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	print(open_lanes)
+	print(lanes)
 	pass
 
 func _on_spawn_timer_timeout() -> void:
@@ -41,7 +59,7 @@ func _on_spawn_timer_timeout() -> void:
 	robot_instance.direction = Singleton.get_travel_direction(Singleton.array_to_spawner_grid(spawner_selected))
 	grid_instance.add_child(robot_instance)
 
-func crash_occurred(pos:Vector2) -> void:
+func _crash_occurred(pos:Vector2) -> void:
 	add_obstacle(Singleton.grid_position_to_array(Singleton.grid_position_to_index(pos)))
 
 func add_obstacle(idx:int) -> void:
@@ -52,6 +70,11 @@ func add_obstacle(idx:int) -> void:
 		var obstacle_instance = Singleton.obstacle_scene.instantiate()
 		obstacle_instance.position = Singleton.grid_index_to_position(Singleton.array_to_grid_position(idx))
 		grid_instance.add_child(obstacle_instance)
+		var closed_lanes:Array[int] = [Singleton.array_to_grid_position(idx).x-1,Singleton.array_to_grid_position(idx).y+6-1]
+		lanes[closed_lanes[0]] = LaneStatus.CLOSED
+		lanes[closed_lanes[1]] = LaneStatus.CLOSED
+		open_lanes.erase(closed_lanes[0])
+		open_lanes.erase(closed_lanes[1])
 
 
 
