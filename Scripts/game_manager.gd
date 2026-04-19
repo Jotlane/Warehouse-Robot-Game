@@ -12,6 +12,7 @@ func _ready() -> void:
 	grid_instance = grid_scene.instantiate()
 	grid_instance.position = grid_position_offset
 	add_child(grid_instance)
+	Singleton.grid_instance = grid_instance
 	for i in range(Singleton.num_rows):
 		var instance = dummy_scene.instantiate()
 		instance.position = Vector2(0,i*Singleton.grid_size)

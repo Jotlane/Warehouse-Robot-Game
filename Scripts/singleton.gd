@@ -1,12 +1,20 @@
 extends Node
 
-var grid
+var grid_instance
 var grid_size :int = 120
 var num_rows = 8
 var num_columns = 8
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+func crash_occurred(pos:Vector2) -> void:
+	grid_position_to_index(pos)
+	pass
 
 func spawner_grid_to_array(pos:Vector2i) -> int:
 	if (pos.y == 0):
@@ -37,11 +45,12 @@ func array_to_spawner_grid(idx:int) -> Vector2i:
 		print("array_to_spawner_grid: Invalid array, returning Vector2i(0,0)")
 		return Vector2i(0,0)
 
-func grid_index_to_position(pos:Vector2i):	return Vector2(pos.x * grid_size,pos.y * grid_size)
+func grid_index_to_position(pos:Vector2i) -> Vector2:	return Vector2(pos.x * grid_size,pos.y * grid_size)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func grid_position_to_index(pos:Vector2)-> Vector2i: return Vector2i(int(pos.x) / grid_size,int(pos.y) / grid_size)
 
-func crash_occurred(pos:Vector2) -> void:
-	pass
+func grid_position_to_array(pos:Vector2i) -> int:
+	return pos.y*num_columns + pos.x
+
+func array_to_grid_position(idx:int) -> Vector2i:
+	return Vector2i(idx%num_columns,idx/num_columns)
