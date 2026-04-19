@@ -4,3 +4,4 @@
 
 [node name="DummyNodeToBeSpawned" type="Sprite2D" unique_id=365475798]
 texture = ExtResource("1_t5t6d")
+flip_v = true

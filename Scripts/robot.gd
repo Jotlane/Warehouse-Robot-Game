@@ -25,3 +25,5 @@ func _on_robot_click_area_input_event(viewport: Node, event: InputEvent, shape_i
 
 func _on_robot_crash_area_area_entered(area: Area2D) -> void:
 	print("Crash with ", area)
+	Singleton.crash_occurred((position+area.get_parent().position)*0.5)
+	queue_free()

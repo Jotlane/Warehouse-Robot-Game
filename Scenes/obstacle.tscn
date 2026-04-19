@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c77ex05y7wk6p"]
+
+[ext_resource type="Texture2D" uid="uid://opu0gbd3evfr" path="res://icon.svg" id="1_sl1jc"]
+
+[node name="Obstacle" type="Node2D" unique_id=238841106]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1476320525]
+rotation = 0.7400196
+texture = ExtResource("1_sl1jc")

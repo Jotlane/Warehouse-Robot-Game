@@ -4,8 +4,14 @@ var grid_instance
 var grid_size :int = 120
 var num_rows = 8
 var num_columns = 8
+var grid_obstacles:Array[int] = []
+var obstacle_scene:PackedScene
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	grid_obstacles.resize(num_columns*num_rows)
+	grid_obstacles.fill(0)
+	obstacle_scene = preload("uid://c77ex05y7wk6p")
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -13,8 +19,7 @@ func _process(delta: float) -> void:
 	pass
 
 func crash_occurred(pos:Vector2) -> void:
-	grid_position_to_index(pos)
-	pass
+	add_obstacle(grid_position_to_array(grid_position_to_index(pos)))
 
 func spawner_grid_to_array(pos:Vector2i) -> int:
 	if (pos.y == 0):
@@ -54,3 +59,24 @@ func grid_position_to_array(pos:Vector2i) -> int:
 
 func array_to_grid_position(idx:int) -> Vector2i:
 	return Vector2i(idx%num_columns,idx/num_columns)
+
+func add_obstacle(idx:int) -> void:
+	if (grid_obstacles[idx]):
+		print("Already occupied with obstacle")
+	else:
+		grid_obstacles[idx] = 1
+		var obstacle_instance = obstacle_scene.instantiate()
+		obstacle_instance.position = grid_index_to_position(array_to_grid_position(idx))
+		grid_instance.add_child(obstacle_instance)
+
+func get_travel_direction(pos:Vector2i)->Vector2:
+	if (pos.y == 0):
+		return Vector2.DOWN
+	elif (pos.x == num_columns-1):
+		return Vector2.LEFT
+	elif (pos.y == num_rows-1):
+		return Vector2.UP
+	elif (pos.x == 0):
+		return Vector2.RIGHT
+	print("get_travel_direction: ", "Invalid position given, going down")
+	return Vector2.DOWN

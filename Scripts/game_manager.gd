@@ -22,23 +22,26 @@ func _ready() -> void:
 		var instance = dummy_scene.instantiate()
 		instance.position = Vector2(j*Singleton.grid_size,0)
 		grid_instance.add_child(instance)
-	
-	#Debug for spawner_grid_to_array
-	#debug_spawner_grid_to_array()
-	#Debug for array_to_spawner_grid
-	#debug_array_to_spawner_grid()
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-var aa = 0
+
 func _on_spawn_timer_timeout() -> void:
 	var robot_instance = robot_scene.instantiate()
-	robot_instance.direction = Vector2.DOWN
-	robot_instance.position = Singleton.grid_index_to_position(Singleton.array_to_spawner_grid(aa))
+	var rng = RandomNumberGenerator.new()
+	var spawner_selected:int = rng.randi_range(0,Singleton.num_columns*2+Singleton.num_rows*2-5)
+	robot_instance.position = Singleton.grid_index_to_position(Singleton.array_to_spawner_grid(spawner_selected))
+	robot_instance.direction = Singleton.get_travel_direction(Singleton.array_to_spawner_grid(spawner_selected))
 	grid_instance.add_child(robot_instance)
-	aa +=1
+
+
+
+
+
+
 
 #DEBUG FUNCTIONS
 func debug_array_to_spawner_grid() ->void:
