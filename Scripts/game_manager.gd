@@ -47,17 +47,41 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	print(open_lanes)
-	print(lanes)
+	#print(open_lanes)
+	#print(lanes)
 	pass
 
 func _on_spawn_timer_timeout() -> void:
 	var robot_instance = robot_scene.instantiate()
-	var rng = RandomNumberGenerator.new()
-	var spawner_selected:int = rng.randi_range(0,Singleton.num_columns*2+Singleton.num_rows*2-5)
-	robot_instance.position = Singleton.grid_index_to_position(Singleton.array_to_spawner_grid(spawner_selected))
-	robot_instance.direction = Singleton.get_travel_direction(Singleton.array_to_spawner_grid(spawner_selected))
-	grid_instance.add_child(robot_instance)
+	var selected_lane:int
+	if (open_lanes.is_empty()):
+		print("Out of lanes")
+	else:
+		selected_lane = open_lanes.pick_random()
+		var spawner_selected:Vector2i
+		if (lanes[selected_lane] == LaneStatus.OPEN):
+			var starting_point:int = randi_range(0,1)
+			if (selected_lane<Singleton.num_rows-2):
+				if (starting_point == 0): spawner_selected = Vector2i(0,selected_lane+1)
+				else: spawner_selected = Vector2i(Singleton.num_rows-1,selected_lane+1)
+			else:
+				if (starting_point == 0): spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,0)
+				else: spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,Singleton.num_columns-1)
+		elif (lanes[selected_lane] == LaneStatus.LEFT):
+			if (selected_lane<Singleton.num_rows-2):
+				spawner_selected = Vector2i(0,selected_lane+1)
+			else:
+				spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,0)
+		elif (lanes[selected_lane] == LaneStatus.RIGHT):
+			if (selected_lane<Singleton.num_rows-2):
+				spawner_selected = Vector2i(Singleton.num_rows-1,selected_lane+1)
+			else:
+				spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,Singleton.num_columns-1)
+		else: print("ERROR Trying to spawn in a closed lane")
+		print(spawner_selected)
+		robot_instance.position = Singleton.grid_index_to_position(spawner_selected)
+		robot_instance.direction = Singleton.get_travel_direction(spawner_selected)
+		grid_instance.add_child(robot_instance)
 
 func _crash_occurred(pos:Vector2) -> void:
 	add_obstacle(Singleton.grid_position_to_array(Singleton.grid_position_to_index(pos)))
@@ -66,15 +90,21 @@ func add_obstacle(idx:int) -> void:
 	if (grid_obstacles[idx]):
 		print("Already occupied with obstacle")
 	else:
-		grid_obstacles[idx] = 1
-		var obstacle_instance = Singleton.obstacle_scene.instantiate()
-		obstacle_instance.position = Singleton.grid_index_to_position(Singleton.array_to_grid_position(idx))
-		grid_instance.add_child(obstacle_instance)
-		var closed_lanes:Array[int] = [Singleton.array_to_grid_position(idx).x-1,Singleton.array_to_grid_position(idx).y+6-1]
-		lanes[closed_lanes[0]] = LaneStatus.CLOSED
-		lanes[closed_lanes[1]] = LaneStatus.CLOSED
-		open_lanes.erase(closed_lanes[0])
-		open_lanes.erase(closed_lanes[1])
+		if (Singleton.array_to_grid_position(idx).x != 0 and Singleton.array_to_grid_position(idx).x != Singleton.num_columns and Singleton.array_to_grid_position(idx).y != 0 and Singleton.array_to_grid_position(idx).y != Singleton.num_rows):
+			grid_obstacles[idx] = 1
+			var obstacle_instance = Singleton.obstacle_scene.instantiate()
+			obstacle_instance.position = Singleton.grid_index_to_position(Singleton.array_to_grid_position(idx))
+			grid_instance.add_child(obstacle_instance)
+			
+			var closed_lanes:Array[int] = [Singleton.array_to_grid_position(idx).y-1,Singleton.array_to_grid_position(idx).x+6-1]
+			
+			lanes[closed_lanes[0]] = LaneStatus.CLOSED
+			lanes[closed_lanes[1]] = LaneStatus.CLOSED
+			open_lanes.erase(closed_lanes[0])
+			open_lanes.erase(closed_lanes[1])
+			print("Lanes: ",lanes)
+			print("Open lanes: ", open_lanes)
+		else: print("Obstacle spawned on edge, ignoring")
 
 
 
