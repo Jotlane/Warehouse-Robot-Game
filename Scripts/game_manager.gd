@@ -44,7 +44,6 @@ func _ready() -> void:
 		grid_instance.add_child(instance)
 
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#print(open_lanes)
@@ -81,6 +80,12 @@ func _on_spawn_timer_timeout() -> void:
 		print(spawner_selected)
 		robot_instance.position = Singleton.grid_index_to_position(spawner_selected)
 		robot_instance.direction = Singleton.get_travel_direction(spawner_selected)
+		if (robot_instance.direction == Vector2.DOWN or robot_instance.direction == Vector2.RIGHT):
+			robot_instance.get_node("RobotCrashArea").set_collision_mask_value(4,true)
+			#If I am heading right, I will reach the one on the right
+		elif (robot_instance.direction == Vector2.UP or robot_instance.direction == Vector2.LEFT):
+			robot_instance.get_node("RobotCrashArea").set_collision_mask_value(3,true)
+			#If I am heading left, I will reach the one on the left
 		grid_instance.add_child(robot_instance)
 
 func _crash_occurred(pos:Vector2) -> void:

@@ -22,8 +22,13 @@ func _on_robot_click_area_input_event(viewport: Node, event: InputEvent, shape_i
 	if (event.is_action_pressed("left_click")):
 		is_stopped = !is_stopped
 
-
+#TODO make the 3 or 4 be one of them based on some variable they have
 func _on_robot_crash_area_area_entered(area: Area2D) -> void:
 	print("Crash with ", area)
+	print("area layer:", area.get_collision_layer())
+	if (area.get_collision_layer() & 2):
+		print("explode")
+	elif (area.get_collision_layer() & 3 or area.get_collision_layer() & 4):
+		print("clear")
 	Singleton.crash_occurred.emit((position+area.get_parent().position)*0.5)
 	queue_free()
