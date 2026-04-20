@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://s0qvk7oe4lrh"]
+
+[ext_resource type="Texture2D" uid="uid://bcjwqtcg1ank2" path="res://Sprites/face.png" id="1_0jlk5"]
+[ext_resource type="Script" uid="uid://dyvanrm7siyhn" path="res://Scripts/face.gd" id="1_j5fwq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jlk5"]
+atlas = ExtResource("1_0jlk5")
+region = Rect2(320, 0, 80, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5fwq"]
+atlas = ExtResource("1_0jlk5")
+region = Rect2(0, 0, 80, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cwi3a"]
+atlas = ExtResource("1_0jlk5")
+region = Rect2(80, 0, 80, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ye2r"]
+atlas = ExtResource("1_0jlk5")
+region = Rect2(160, 0, 80, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3a8mw"]
+atlas = ExtResource("1_0jlk5")
+region = Rect2(240, 0, 80, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7ye2r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0jlk5")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5fwq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cwi3a")
+}],
+"loop": true,
+"name": &"happy",
+"speed": 2.3
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ye2r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3a8mw")
+}],
+"loop": true,
+"name": &"nervous",
+"speed": 3.0
+}]
+
+[node name="Face" type="Node2D" unique_id=356184654]
+script = ExtResource("1_j5fwq")
+shake_range = 30.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1739581212]
+position = Vector2(0, -4)
+scale = Vector2(7.5, 7.5)
+sprite_frames = SubResource("SpriteFrames_7ye2r")
+animation = &"happy"
+autoplay = "happy"
+
+[node name="Timer" type="Timer" parent="." unique_id=571433751]
+wait_time = 0.9
+
+[node name="Subtimer" type="Timer" parent="." unique_id=1493639650]
+wait_time = 0.1
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Subtimer" to="." method="_on_subtimer_timeout"]

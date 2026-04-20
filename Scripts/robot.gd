@@ -21,7 +21,7 @@ func _ready() -> void:
 	if (direction == Vector2.LEFT):
 		$RobotAnimatedSprite.flip_h = true
 	else:
-		$RobotAnimatedSprite.rotation = direction.angle() #TODO: Change this to specific up/down/left/right sprite or flip etc
+		$RobotAnimatedSprite.rotation = direction.angle()
 	speed = speed_normal
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bbdfmetftxp4r" path="res://Scenes/robot.tscn" id="4_mmt5l"]
 [ext_resource type="PackedScene" uid="uid://dxr4rvugme6dw" path="res://Scenes/finish_point.tscn" id="5_fgdfb"]
 [ext_resource type="AudioStream" uid="uid://bxy6vgch0qc3l" path="res://Audio/Getting it Done.mp3" id="6_yqty0"]
+[ext_resource type="PackedScene" uid="uid://s0qvk7oe4lrh" path="res://Scenes/face.tscn" id="7_71d4j"]
 
 [node name="GameManager" type="Node2D" unique_id=1908083967]
 script = ExtResource("1_oj352")
@@ -25,4 +26,29 @@ volume_db = -3.931
 autoplay = true
 parameters/looping = true
 
+[node name="Face" parent="." unique_id=356184654 instance=ExtResource("7_71d4j")]
+position = Vector2(1567, 409)
+
+[node name="ScoreLabel" type="Label" parent="." unique_id=1761380775]
+offset_left = 1284.0
+offset_top = 877.0
+offset_right = 1894.0
+offset_bottom = 967.0
+theme_override_font_sizes/font_size = 57
+text = "Packages cleared: 0"
+
+[node name="GameEnder" type="ColorRect" parent="." unique_id=2062986074]
+z_index = 34
+offset_left = -100.0
+offset_top = -64.0
+offset_right = 2047.0
+offset_bottom = 1158.0
+mouse_filter = 2
+color = Color(1, 0, 0, 0)
+
+[node name="Timer" type="Timer" parent="GameEnder" unique_id=1228322050]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="GameEnder/Timer" to="." method="_on_game_ender_timer_timeout"]

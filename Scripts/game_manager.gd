@@ -18,6 +18,12 @@ var grid_instance
 var lanes:Array[LaneStatus] = []
 var open_lanes:Array[int] = []
 var lane_contents:Array[int] = []
+var packages_cleared_score:int = 0
+var game_ender_node
+var game_ender_node_timer
+var game_ender_node_timer_initial_wait
+var game_ender_countdown = 0
+var game_ended:bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -57,11 +63,18 @@ func _ready() -> void:
 			else: print("Error: Cannot set finish point collision area")
 			finish_point_instance.position = Singleton.grid_index_to_position(Singleton.array_to_spawner_grid(i))
 			grid_instance.add_child(finish_point_instance)
+		
+	game_ender_node = $GameEnder
+	game_ender_node_timer = $GameEnder/Timer
+	game_ender_node_timer_initial_wait = game_ender_node_timer.wait_time
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#print(open_lanes)
 	#print(lanes)
+	if (game_ended):
+		game_ender_countdown += delta
+		game_ender_node.color = Color(1,0,0,(game_ender_countdown/game_ender_node_timer_initial_wait))
 	pass
 
 func _on_spawn_timer_timeout() -> void:
@@ -132,12 +145,27 @@ func add_obstacle(idx:int) -> void:
 			open_lanes.erase(closed_lanes[1])
 			print("Lanes: ",lanes)
 			print("Open lanes: ", open_lanes)
+			
+			Singleton.obstacle_spawned.emit()
+			
+			Singleton.remaining_lanes.emit(open_lanes.size())
+			
+			if (open_lanes.size() < 2):
+				print("end game")
+				spawn_game_ender()
 		else: print("Obstacle spawned on edge, ignoring")
 
 func _robot_exited_lane(lane:int):
 	lane_contents[lane] -= 1
 	if (lane_contents[lane] <= 0 and lanes[lane] != LaneStatus.CLOSED):
 		lanes[lane] = LaneStatus.OPEN
+	packages_cleared_score += 1
+	$ScoreLabel.text = "Packages cleared: " + str(packages_cleared_score)
+
+func spawn_game_ender() -> void:
+	$GameEnder/Timer.start()
+	game_ended = true
+	Singleton.final_score = packages_cleared_score
 
 #DEBUG FUNCTIONS
 func debug_array_to_spawner_grid() ->void:
@@ -148,3 +176,7 @@ func debug_spawner_grid_to_array() -> void:
 	for i in range(Singleton.num_rows):
 		for j in range(Singleton.num_columns):
 			print(Singleton.spawner_grid_to_array(Vector2i(j,i)))
+
+
+func _on_game_ender_timer_timeout() -> void:
+	get_tree().change_scene_to_file("uid://bpsmtk1qjinnv")

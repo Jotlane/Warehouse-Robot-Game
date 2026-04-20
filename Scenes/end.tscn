@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bpsmtk1qjinnv"]
+
+[ext_resource type="Script" uid="uid://ce1qjuv6ascan" path="res://end.gd" id="1_5j2cu"]
+[ext_resource type="AudioStream" uid="uid://8d8bjx2jjjms" path="res://Audio/Relent.mp3" id="2_xmt8n"]
+
+[node name="end" type="Node2D" unique_id=1316573531]
+script = ExtResource("1_5j2cu")
+
+[node name="Button" type="Button" parent="." unique_id=1514485320]
+offset_left = 578.0
+offset_top = 679.0
+offset_right = 1292.0
+offset_bottom = 1002.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1986626179]
+stream = ExtResource("2_xmt8n")
+autoplay = true
+
+[node name="Label" type="Label" parent="." unique_id=66850393]
+offset_left = 755.0
+offset_top = 504.0
+offset_right = 1161.0
+offset_bottom = 592.0
+theme_override_font_sizes/font_size = 64
+text = "Final Score: 0"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

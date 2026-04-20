@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://2fftkucgndd5"]
+
+[ext_resource type="Script" uid="uid://scb75us6b7k" path="res://start.gd" id="1_3bxa3"]
+[ext_resource type="AudioStream" uid="uid://bxy6vgch0qc3l" path="res://Audio/Getting it Done.mp3" id="2_r48yj"]
+
+[node name="start" type="Node2D" unique_id=1599353919]
+script = ExtResource("1_3bxa3")
+
+[node name="Button" type="Button" parent="." unique_id=1946950385]
+offset_left = 562.0
+offset_top = 323.0
+offset_right = 1276.0
+offset_bottom = 646.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=144137474]
+stream = ExtResource("2_r48yj")
+autoplay = true
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

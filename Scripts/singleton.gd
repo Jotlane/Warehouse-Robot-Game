@@ -5,9 +5,12 @@ var grid_size :int = 120
 var num_rows = 8
 var num_columns = 8
 var obstacle_scene:PackedScene
+var final_score:int = 0
 
 signal crash_occurred(pos:Vector2)
 signal robot_exited_lane(lane: int)
+signal obstacle_spawned
+signal remaining_lanes(num:int)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
