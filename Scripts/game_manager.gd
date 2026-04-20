@@ -7,7 +7,7 @@ enum LaneStatus {
 	OPEN
 }
 
-@export var dummy_scene:PackedScene
+@export var grid_tile:PackedScene
 @export var grid_scene:PackedScene
 @export var grid_position_offset:Vector2
 @export var robot_scene:PackedScene
@@ -39,15 +39,12 @@ func _ready() -> void:
 	
 	Singleton.crash_occurred.connect(_crash_occurred)
 	Singleton.robot_exited_lane.connect(_robot_exited_lane)
-	#for i in range(Singleton.num_rows):
-		#var instance = dummy_scene.instantiate()
-		#instance.position = Vector2(0,i*Singleton.grid_size)
-		#grid_instance.add_child(instance)
-		#
-	#for j in range(Singleton.num_columns):
-		#var instance = dummy_scene.instantiate()
-		#instance.position = Vector2(j*Singleton.grid_size,0)
-		#grid_instance.add_child(instance)
+	for i in range(Singleton.num_rows):
+		for j in range(Singleton.num_columns):
+			if (i != 0 and j != 0 and i != Singleton.num_rows -1 and j != Singleton.num_columns-1):
+				var instance = grid_tile.instantiate()
+				instance.position = Vector2(j*Singleton.grid_size,i*Singleton.grid_size)
+				grid_instance.add_child(instance)
 		
 	for i in range((Singleton.num_columns-1)*2+(Singleton.num_rows-1)*2):
 		if (i != 0 and i != Singleton.num_columns-1 and i != Singleton.num_columns -1 + Singleton.num_rows-1 and i != Singleton.num_columns -1 + Singleton.num_rows-1+Singleton.num_columns -1):

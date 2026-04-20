@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bkne66hphc7nd"]
+
+[ext_resource type="Texture2D" uid="uid://w2frd47pbe8q" path="res://Sprites/tile.png" id="1_1jsc2"]
+
+[node name="GridTile" type="Sprite2D" unique_id=2143348019]
+texture = ExtResource("1_1jsc2")

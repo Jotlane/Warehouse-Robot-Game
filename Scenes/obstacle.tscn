@@ -1,9 +1,80 @@
 [gd_scene format=3 uid="uid://c77ex05y7wk6p"]
 
-[ext_resource type="Texture2D" uid="uid://opu0gbd3evfr" path="res://icon.svg" id="1_sl1jc"]
+[ext_resource type="Texture2D" uid="uid://djgot4ipdn1p1" path="res://Sprites/obstacle.png" id="2_2p81s"]
+[ext_resource type="AudioStream" uid="uid://dabbm16ejb7ql" path="res://Audio/crash.mp3" id="3_a6yce"]
+[ext_resource type="Script" uid="uid://dgm56xbdghtxj" path="res://Scripts/obstacle_animated_sprite.gd" id="3_rvx1i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rvx1i"]
+atlas = ExtResource("2_2p81s")
+region = Rect2(0, 0, 120, 120)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6yce"]
+atlas = ExtResource("2_2p81s")
+region = Rect2(120, 0, 120, 120)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p763d"]
+atlas = ExtResource("2_2p81s")
+region = Rect2(240, 0, 120, 120)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_af0pv"]
+atlas = ExtResource("2_2p81s")
+region = Rect2(360, 0, 120, 120)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_my8i3"]
+atlas = ExtResource("2_2p81s")
+region = Rect2(480, 0, 120, 120)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_km3lo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rvx1i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6yce")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.2
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p763d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_af0pv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_my8i3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_my8i3")
+}],
+"loop": false,
+"name": &"explode",
+"speed": 4.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rvx1i"]
+size = Vector2(97, 58)
 
 [node name="Obstacle" type="Node2D" unique_id=238841106]
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1476320525]
-rotation = 0.7400196
-texture = ExtResource("1_sl1jc")
+[node name="ObstacleAnimatedSprite" type="AnimatedSprite2D" parent="." unique_id=306880279]
+sprite_frames = SubResource("SpriteFrames_km3lo")
+autoplay = "explode"
+script = ExtResource("3_rvx1i")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=464465680]
+stream = ExtResource("3_a6yce")
+autoplay = true
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2052911924]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1171925406]
+position = Vector2(0.5, 22)
+shape = SubResource("RectangleShape2D_rvx1i")
+
+[connection signal="animation_finished" from="ObstacleAnimatedSprite" to="ObstacleAnimatedSprite" method="_on_animation_finished"]

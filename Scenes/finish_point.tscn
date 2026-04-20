@@ -1,20 +1,27 @@
 [gd_scene format=3 uid="uid://dxr4rvugme6dw"]
 
-[ext_resource type="Texture2D" uid="uid://opu0gbd3evfr" path="res://icon.svg" id="1_eqp27"]
+[ext_resource type="Script" uid="uid://bee46r5dtkjor" path="res://Scenes/finish_point.gd" id="1_8crl0"]
+[ext_resource type="Texture2D" uid="uid://pglcnjpd673" path="res://Sprites/finishpoint.png" id="1_eqp27"]
+[ext_resource type="AudioStream" uid="uid://dcl2mlj0731md" path="res://Audio/pickupCoin.wav" id="3_xrrgm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eqp27"]
 size = Vector2(40, 40)
 
 [node name="FinishPoint" type="Node2D" unique_id=1582533133]
+script = ExtResource("1_8crl0")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=530459854]
-rotation = -0.7853982
-scale = Vector2(0.441, 0.441)
 texture = ExtResource("1_eqp27")
+hframes = 2
 
 [node name="FinishPointArea" type="Area2D" parent="." unique_id=373074289]
 collision_layer = 0
-collision_mask = 0
+collision_mask = 2
 
 [node name="FinishPointCollisionShape" type="CollisionShape2D" parent="FinishPointArea" unique_id=1449424475]
 shape = SubResource("RectangleShape2D_eqp27")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=158394316]
+stream = ExtResource("3_xrrgm")
+
+[connection signal="area_entered" from="FinishPointArea" to="." method="_on_finish_point_area_area_entered"]
