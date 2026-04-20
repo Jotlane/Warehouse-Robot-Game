@@ -17,7 +17,7 @@ robot_scene = ExtResource("4_mmt5l")
 finish_point_scene = ExtResource("5_fgdfb")
 
 [node name="SpawnTimer" type="Timer" parent="." unique_id=745342297]
-wait_time = 2.0
+wait_time = 2.5
 autostart = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2034242838]
@@ -49,6 +49,14 @@ color = Color(1, 0, 0, 0)
 [node name="Timer" type="Timer" parent="GameEnder" unique_id=1228322050]
 wait_time = 2.0
 one_shot = true
+
+[node name="InstructionLabel" type="Label" parent="." unique_id=1827970209]
+offset_left = 694.0
+offset_top = 1024.0
+offset_right = 1336.0
+offset_bottom = 1063.0
+theme_override_font_sizes/font_size = 28
+text = "Click on a robot to signal it to stop/start moving"
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="GameEnder/Timer" to="." method="_on_game_ender_timer_timeout"]

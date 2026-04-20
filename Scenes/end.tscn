@@ -2,15 +2,41 @@
 
 [ext_resource type="Script" uid="uid://ce1qjuv6ascan" path="res://end.gd" id="1_5j2cu"]
 [ext_resource type="AudioStream" uid="uid://8d8bjx2jjjms" path="res://Audio/Relent.mp3" id="2_xmt8n"]
+[ext_resource type="Texture2D" uid="uid://bcjwqtcg1ank2" path="res://Sprites/face.png" id="3_02kpm"]
+[ext_resource type="Texture2D" uid="uid://djgot4ipdn1p1" path="res://Sprites/obstacle.png" id="4_ql4ve"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5l5q"]
+atlas = ExtResource("4_ql4ve")
+region = Rect2(0, 0, 120, 120)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t3us6"]
+atlas = ExtResource("4_ql4ve")
+region = Rect2(120, 0, 120, 120)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d0yn4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5l5q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t3us6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
 
 [node name="end" type="Node2D" unique_id=1316573531]
 script = ExtResource("1_5j2cu")
 
 [node name="Button" type="Button" parent="." unique_id=1514485320]
-offset_left = 578.0
-offset_top = 679.0
-offset_right = 1292.0
-offset_bottom = 1002.0
+offset_left = 606.0
+offset_top = 669.0
+offset_right = 1320.0
+offset_bottom = 992.0
+theme_override_font_sizes/font_size = 64
+text = "Return to start"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1986626179]
 stream = ExtResource("2_xmt8n")
@@ -18,10 +44,29 @@ autoplay = true
 
 [node name="Label" type="Label" parent="." unique_id=66850393]
 offset_left = 755.0
-offset_top = 504.0
+offset_top = 535.0
 offset_right = 1161.0
-offset_bottom = 592.0
+offset_bottom = 623.0
 theme_override_font_sizes/font_size = 64
 text = "Final Score: 0"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1508207375]
+position = Vector2(943, 258)
+scale = Vector2(5, 5)
+texture = ExtResource("3_02kpm")
+hframes = 5
+frame = 4
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1640297843]
+position = Vector2(302.00003, 788)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_d0yn4")
+frame_progress = 0.5392541
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." unique_id=1757966881]
+position = Vector2(1622, 800.00006)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_d0yn4")
+frame_progress = 0.109214455
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

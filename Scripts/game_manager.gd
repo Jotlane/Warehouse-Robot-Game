@@ -161,6 +161,13 @@ func _robot_exited_lane(lane:int):
 		lanes[lane] = LaneStatus.OPEN
 	packages_cleared_score += 1
 	$ScoreLabel.text = "Packages cleared: " + str(packages_cleared_score)
+	if (packages_cleared_score > 10):
+		$SpawnTimer.set_wait_time(2)
+	if (packages_cleared_score > 20):
+		$SpawnTimer.set_wait_time(1.5)
+	if (packages_cleared_score > 30):
+		$SpawnTimer.set_wait_time(1)
+		print("speeding up")
 
 func spawn_game_ender() -> void:
 	$GameEnder/Timer.start()

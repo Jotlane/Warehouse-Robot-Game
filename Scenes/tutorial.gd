@@ -12,8 +12,4 @@ func _process(delta: float) -> void:
 
 
 func _on_button_pressed() -> void:
-	get_tree().change_scene_to_file("uid://qfdlq8sjhrfx");
-
-
-func _on_button_2_pressed() -> void:
-	get_tree().change_scene_to_file("uid://6y0mi0yerl5i");
+	get_tree().change_scene_to_file("uid://2fftkucgndd5");

@@ -2,18 +2,102 @@
 
 [ext_resource type="Script" uid="uid://scb75us6b7k" path="res://start.gd" id="1_3bxa3"]
 [ext_resource type="AudioStream" uid="uid://bxy6vgch0qc3l" path="res://Audio/Getting it Done.mp3" id="2_r48yj"]
+[ext_resource type="Texture2D" uid="uid://b3w0lkumes66m" path="res://Sprites/robot-Sheet.png" id="3_5ogh5"]
+[ext_resource type="Texture2D" uid="uid://bcjwqtcg1ank2" path="res://Sprites/face.png" id="3_lb6bl"]
+[ext_resource type="Texture2D" uid="uid://df3efafe8kd8k" path="res://Sprites/title.png" id="5_rk01k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o3wvq"]
+atlas = ExtResource("3_lb6bl")
+region = Rect2(160, 0, 80, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pg4io"]
+atlas = ExtResource("3_lb6bl")
+region = Rect2(240, 0, 80, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_iceld"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o3wvq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pg4io")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lb6bl"]
+atlas = ExtResource("3_5ogh5")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rk01k"]
+atlas = ExtResource("3_5ogh5")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o3wvq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lb6bl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rk01k")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
 
 [node name="start" type="Node2D" unique_id=1599353919]
 script = ExtResource("1_3bxa3")
 
 [node name="Button" type="Button" parent="." unique_id=1946950385]
-offset_left = 562.0
-offset_top = 323.0
-offset_right = 1276.0
-offset_bottom = 646.0
+offset_left = 200.0
+offset_top = 772.0
+offset_right = 655.0
+offset_bottom = 988.0
+theme_override_font_sizes/font_size = 64
+text = "Start"
+
+[node name="Button2" type="Button" parent="." unique_id=2094614488]
+offset_left = 1313.0
+offset_top = 748.0
+offset_right = 1788.0
+offset_bottom = 995.0
+theme_override_font_sizes/font_size = 64
+text = "Tutorial/Story"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=144137474]
 stream = ExtResource("2_r48yj")
 autoplay = true
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1740127013]
+position = Vector2(1005, 862)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_iceld")
+autoplay = "default"
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." unique_id=548040405]
+position = Vector2(302, 265)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_o3wvq")
+autoplay = "default"
+frame_progress = 0.104973145
+
+[node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="." unique_id=318659564]
+position = Vector2(1666, 246)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_o3wvq")
+autoplay = "default"
+frame_progress = 0.104973145
+flip_h = true
+
+[node name="Title" type="Sprite2D" parent="." unique_id=616147606]
+position = Vector2(953, 448)
+scale = Vector2(4, 4)
+texture = ExtResource("5_rk01k")
+
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
