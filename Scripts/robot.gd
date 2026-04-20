@@ -5,6 +5,7 @@ var direction:Vector2 = Vector2.RIGHT
 var speed: float
 var is_stopped:bool = false
 var finish_mask:int
+var lane:int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -19,20 +20,20 @@ func _process(delta: float) -> void:
 		position += direction * speed * delta
 
 func set_heading_right(right:bool):
-	if (right): finish_mask = 4
-	else: finish_mask = 3
+	if (right): finish_mask = 8#4
+	else: finish_mask = 4#3
 
 func _on_robot_click_area_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if (event.is_action_pressed("left_click")):
 		is_stopped = !is_stopped
 
-#TODO make the 3 or 4 be one of them based on some variable they have
 func _on_robot_crash_area_area_entered(area: Area2D) -> void:
 	print("Crash with ", area)
 	print("area layer:", area.get_collision_layer())
 	if (area.get_collision_layer() & 2):
 		print("explode")
+		Singleton.crash_occurred.emit((position+area.get_parent().position)*0.5)
 	elif (area.get_collision_layer() & finish_mask):
 		print("clear")
-	Singleton.crash_occurred.emit((position+area.get_parent().position)*0.5)
+		Singleton.robot_exited_lane.emit(lane)
 	queue_free()

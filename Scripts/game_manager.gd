@@ -17,6 +17,7 @@ var grid_obstacles:Array[int] = []
 var grid_instance
 var lanes:Array[LaneStatus] = []
 var open_lanes:Array[int] = []
+var lane_contents:Array[int] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -33,8 +34,11 @@ func _ready() -> void:
 	for i in range(lanes.size()):
 		open_lanes.append(i)
 	
-	Singleton.crash_occurred.connect(_crash_occurred)
+	lane_contents.resize(lanes.size())
+	lane_contents.fill(0)
 	
+	Singleton.crash_occurred.connect(_crash_occurred)
+	Singleton.robot_exited_lane.connect(_robot_exited_lane)
 	#for i in range(Singleton.num_rows):
 		#var instance = dummy_scene.instantiate()
 		#instance.position = Vector2(0,i*Singleton.grid_size)
@@ -81,14 +85,16 @@ func _on_spawn_timer_timeout() -> void:
 				else: spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,Singleton.num_columns-1)
 		elif (lanes[selected_lane] == LaneStatus.LEFT):
 			if (selected_lane<Singleton.num_rows-2):
-				spawner_selected = Vector2i(0,selected_lane+1)
-			else:
-				spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,0)
-		elif (lanes[selected_lane] == LaneStatus.RIGHT):
-			if (selected_lane<Singleton.num_rows-2):
 				spawner_selected = Vector2i(Singleton.num_rows-1,selected_lane+1)
 			else:
 				spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,Singleton.num_columns-1)
+				
+		elif (lanes[selected_lane] == LaneStatus.RIGHT):
+			if (selected_lane<Singleton.num_rows-2):
+				spawner_selected = Vector2i(0,selected_lane+1)
+			else:
+				spawner_selected = Vector2i(selected_lane-(Singleton.num_rows-2)+1,0)
+				
 		else: print("ERROR Trying to spawn in a closed lane")
 		print(spawner_selected)
 		robot_instance.position = Singleton.grid_index_to_position(spawner_selected)
@@ -96,11 +102,16 @@ func _on_spawn_timer_timeout() -> void:
 		if (robot_instance.direction == Vector2.DOWN or robot_instance.direction == Vector2.RIGHT):
 			robot_instance.get_node("RobotCrashArea").set_collision_mask_value(4,true)
 			robot_instance.set_heading_right(true)
+			lanes[selected_lane] = LaneStatus.RIGHT
 			#If I am heading right, I will reach the one on the right
 		elif (robot_instance.direction == Vector2.UP or robot_instance.direction == Vector2.LEFT):
 			robot_instance.get_node("RobotCrashArea").set_collision_mask_value(3,true)
 			robot_instance.set_heading_right(false)
+			lanes[selected_lane] = LaneStatus.LEFT
 			#If I am heading left, I will reach the one on the left
+		lane_contents[selected_lane] += 1
+		robot_instance.lane = selected_lane
+		print("Lanes: ", lanes)
 		grid_instance.add_child(robot_instance)
 
 func _crash_occurred(pos:Vector2) -> void:
@@ -126,7 +137,10 @@ func add_obstacle(idx:int) -> void:
 			print("Open lanes: ", open_lanes)
 		else: print("Obstacle spawned on edge, ignoring")
 
-
+func _robot_exited_lane(lane:int):
+	lane_contents[lane] -= 1
+	if (lane_contents[lane] <= 0 and lanes[lane] != LaneStatus.CLOSED):
+		lanes[lane] = LaneStatus.OPEN
 
 #DEBUG FUNCTIONS
 func debug_array_to_spawner_grid() ->void:

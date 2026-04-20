@@ -7,6 +7,7 @@ var num_columns = 8
 var obstacle_scene:PackedScene
 
 signal crash_occurred(pos:Vector2)
+signal robot_exited_lane(lane: int)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
