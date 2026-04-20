@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b5y3tu8rlbli6"]
+
+[ext_resource type="Script" uid="uid://wptl3bwoj4rs" path="res://Scenes/color_rect.gd" id="1_16oh2"]
+
+[node name="ColorRect" type="ColorRect" unique_id=512067198]
+z_index = -96
+offset_left = -7.0
+offset_top = -2.0
+offset_right = 43.545
+offset_bottom = 8998.0
+rotation = -0.60039324
+mouse_filter = 2
+color = Color(0, 0, 0, 0.15294118)
+script = ExtResource("1_16oh2")
+speed = 50.0

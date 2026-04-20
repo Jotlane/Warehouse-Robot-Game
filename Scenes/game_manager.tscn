@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dxr4rvugme6dw" path="res://Scenes/finish_point.tscn" id="5_fgdfb"]
 [ext_resource type="AudioStream" uid="uid://bxy6vgch0qc3l" path="res://Audio/Getting it Done.mp3" id="6_yqty0"]
 [ext_resource type="PackedScene" uid="uid://s0qvk7oe4lrh" path="res://Scenes/face.tscn" id="7_71d4j"]
+[ext_resource type="Script" uid="uid://dch6or8itgwqs" path="res://Scenes/background_spawner.gd" id="8_i4mau"]
+[ext_resource type="PackedScene" uid="uid://b5y3tu8rlbli6" path="res://Scenes/background_color_rect.tscn" id="9_b5cn8"]
 
 [node name="GameManager" type="Node2D" unique_id=1908083967]
 script = ExtResource("1_oj352")
@@ -58,5 +60,16 @@ offset_bottom = 1063.0
 theme_override_font_sizes/font_size = 28
 text = "Click on a robot to signal it to stop/start moving"
 
+[node name="BackgroundSpawner" type="Node2D" parent="." unique_id=1945033997]
+position = Vector2(851, -1667)
+script = ExtResource("8_i4mau")
+stripe = ExtResource("9_b5cn8")
+
+[node name="ColorRect" parent="BackgroundSpawner" unique_id=512067198 instance=ExtResource("9_b5cn8")]
+
+[node name="Timer" type="Timer" parent="BackgroundSpawner" unique_id=1885080181]
+autostart = true
+
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="GameEnder/Timer" to="." method="_on_game_ender_timer_timeout"]
+[connection signal="timeout" from="BackgroundSpawner/Timer" to="BackgroundSpawner" method="_on_timer_timeout"]
